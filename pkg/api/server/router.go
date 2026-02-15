@@ -32,7 +32,7 @@ func (r *Router) RegisterRoutes(handlers *handlers.ResourceHandlers) {
 	}
 
 	if handlers.URLShortnerHandler != nil {
-		r.registerResourceRoutes("/api/v1/url-shortner", handlers.URLShortnerHandler)
+		r.registerResourceRoutes("/api/v1", handlers.URLShortnerHandler)
 	}
 }
 

@@ -9,19 +9,27 @@ import (
 
 	"github.com/abdulmanafc2001/url-shortner/pkg/api/server"
 	"github.com/abdulmanafc2001/url-shortner/pkg/logger"
+	"github.com/abdulmanafc2001/url-shortner/pkg/service"
+	"github.com/abdulmanafc2001/url-shortner/pkg/storage"
 )
 
 func main() {
 	var port string
+	var baseURL string
 
 	flag.StringVar(&port, "port", "8080", "The port to listen on")
+	flag.StringVar(&baseURL, "baseurl", "http://localhost", "Base url for shortend url routes")
 
 	// Initialize logger
 	log := logger.NewLogger()
+	store := storage.NewMemoryStore()
+	shortenerService := service.NewShortenerService(store)
 
 	// Create server config
 	serverConfig := server.ResourceHandlersConfig{
-		Logger: log,
+		Logger:         log,
+		ShortenService: shortenerService,
+		BaseURL:        baseURL + ":" + port,
 	}
 
 	// Create and start server

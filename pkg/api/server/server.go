@@ -8,6 +8,7 @@ import (
 
 	"github.com/abdulmanafc2001/url-shortner/pkg/api/handlers"
 	"github.com/abdulmanafc2001/url-shortner/pkg/logger"
+	"github.com/abdulmanafc2001/url-shortner/pkg/service"
 )
 
 type Server struct {
@@ -33,14 +34,16 @@ func CORS(next http.Handler) http.Handler {
 }
 
 type ResourceHandlersConfig struct {
-	Logger *logger.Logger
+	Logger         *logger.Logger
+	ShortenService *service.ShortenerService
+	BaseURL        string
 }
 
 func NewServer(config ResourceHandlersConfig) *Server {
 	router := NewRouter(config.Logger)
 
 	resourceHandlers := &handlers.ResourceHandlers{
-		URLShortnerHandler: handlers.NewURLShortnerHandler(config.Logger),
+		URLShortnerHandler: handlers.NewURLShortnerHandler(config.Logger, config.ShortenService, config.BaseURL),
 	}
 
 	router.RegisterRoutes(resourceHandlers)
