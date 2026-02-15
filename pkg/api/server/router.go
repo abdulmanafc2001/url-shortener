@@ -3,8 +3,8 @@ package server
 import (
 	"net/http"
 
-	"github.com/abdulmanafc2001/url-shortner/pkg/api/handlers"
-	"github.com/abdulmanafc2001/url-shortner/pkg/logger"
+	"github.com/abdulmanafc2001/url-shortener/pkg/api/handlers"
+	"github.com/abdulmanafc2001/url-shortener/pkg/logger"
 )
 
 type Router struct {
@@ -32,7 +32,7 @@ func (r *Router) RegisterRoutes(handlers *handlers.ResourceHandlers) {
 	}
 
 	if handlers.URLShortnerHandler != nil {
-		r.registerResourceRoutes("/api/v1", handlers.URLShortnerHandler)
+		r.registerResourceRoutes("/", handlers.URLShortnerHandler)
 	}
 }
 

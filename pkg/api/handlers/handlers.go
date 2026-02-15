@@ -2,12 +2,14 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strings"
 
-	"github.com/abdulmanafc2001/url-shortner/pkg/api/types"
-	"github.com/abdulmanafc2001/url-shortner/pkg/logger"
-	"github.com/abdulmanafc2001/url-shortner/pkg/service"
-	"github.com/abdulmanafc2001/url-shortner/utils"
+	"github.com/abdulmanafc2001/url-shortener/pkg/api/types"
+	"github.com/abdulmanafc2001/url-shortener/pkg/logger"
+	"github.com/abdulmanafc2001/url-shortener/pkg/service"
+	"github.com/abdulmanafc2001/url-shortener/utils"
 )
 
 type URLShortnerHandler struct {
@@ -25,9 +27,18 @@ func NewURLShortnerHandler(logger *logger.Logger, shortener *service.ShortenerSe
 }
 
 func (h *URLShortnerHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	trimmedURL := strings.Trim(r.URL.Path, "/")
 	switch r.Method {
 	case http.MethodPost:
 		h.CreateURLShort(w, r)
+	case http.MethodGet:
+		if trimmedURL == "metrics" {
+			h.Metrics(w, r)
+			return
+		}
+		h.Redirect(w, r)
+	default:
+		utils.RespondWithError(w, http.StatusMethodNotAllowed, "method not allowed", fmt.Errorf("method not allowed"))
 	}
 }
 
@@ -70,13 +81,33 @@ func (h *URLShortnerHandler) CreateURLShort(w http.ResponseWriter, r *http.Reque
 
 	resp := types.ShortenResponse{
 		Code:     code,
-		ShortURL: h.baseURL + "/" + code,
+		ShortURL: h.baseURL + "?" + "code=" + code,
 	}
 
 	h.logger.Info("URL Shortened successfully", map[string]any{
 		"code":     resp.Code,
 		"shortURL": resp.ShortURL,
 	})
-	
+
 	utils.RespondWithJSON(w, http.StatusOK, resp)
+}
+
+func (h *URLShortnerHandler) Redirect(w http.ResponseWriter, r *http.Request) {
+	code := r.URL.Query().Get("code")
+
+	original, ok := h.shortener.Resolve(code)
+	if !ok {
+		h.logger.Error("short url not found", nil)
+
+		utils.RespondWithError(w, http.StatusNotFound, "short url not found", fmt.Errorf("short url not found"))
+		return
+	}
+
+	http.Redirect(w, r, original, http.StatusFound)
+}
+
+func (h *URLShortnerHandler) Metrics(w http.ResponseWriter, r *http.Request) {
+	top := h.shortener.TopDomains(3)
+
+	utils.RespondWithJSON(w, http.StatusOK, top)
 }

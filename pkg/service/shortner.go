@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/abdulmanafc2001/url-shortner/pkg/storage"
+	"github.com/abdulmanafc2001/url-shortener/pkg/storage"
 )
 
 type ShortenerService struct {

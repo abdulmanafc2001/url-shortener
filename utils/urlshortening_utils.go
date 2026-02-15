@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/abdulmanafc2001/url-shortner/pkg/api/types"
+	"github.com/abdulmanafc2001/url-shortener/pkg/api/types"
 )
 
 func ValidateURLShorteningCreateReq(req *types.URLShortnerCreateReq) error {

@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/abdulmanafc2001/url-shortner/pkg/api/handlers"
-	"github.com/abdulmanafc2001/url-shortner/pkg/logger"
-	"github.com/abdulmanafc2001/url-shortner/pkg/service"
+	"github.com/abdulmanafc2001/url-shortener/pkg/api/handlers"
+	"github.com/abdulmanafc2001/url-shortener/pkg/logger"
+	"github.com/abdulmanafc2001/url-shortener/pkg/service"
 )
 
 type Server struct {

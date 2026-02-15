@@ -7,10 +7,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/abdulmanafc2001/url-shortner/pkg/api/server"
-	"github.com/abdulmanafc2001/url-shortner/pkg/logger"
-	"github.com/abdulmanafc2001/url-shortner/pkg/service"
-	"github.com/abdulmanafc2001/url-shortner/pkg/storage"
+	"github.com/abdulmanafc2001/url-shortener/pkg/api/server"
+	"github.com/abdulmanafc2001/url-shortener/pkg/logger"
+	"github.com/abdulmanafc2001/url-shortener/pkg/service"
+	"github.com/abdulmanafc2001/url-shortener/pkg/storage"
 )
 
 func main() {
