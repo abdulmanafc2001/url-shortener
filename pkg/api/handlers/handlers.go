@@ -36,7 +36,14 @@ func (h *URLShortnerHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			h.Metrics(w, r)
 			return
 		}
+
+		if trimmedURL == "" {
+			utils.RespondWithError(w, http.StatusNotFound, "page not found", fmt.Errorf("page not found"))
+			return
+		}
+
 		h.Redirect(w, r)
+
 	default:
 		utils.RespondWithError(w, http.StatusMethodNotAllowed, "method not allowed", fmt.Errorf("method not allowed"))
 	}

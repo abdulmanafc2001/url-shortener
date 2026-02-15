@@ -1,5 +1,5 @@
 # variables
-IMAGE_NAME = cumulus-edge
+IMAGE_NAME = url-shortner
 
 # Tagging: git commit by default, or user provided
 GIT_COMMIT := $(shell git rev-parse --short HEAD)
@@ -19,3 +19,9 @@ info:
 
 build:
 	CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(BINARY_NAME) cmd/main.go
+
+docker-build: build
+	docker build -t $(IMAGE_NAME):$(IMAGE_TAG) .
+
+go-test:
+	go test ./test
